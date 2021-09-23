@@ -27,7 +27,7 @@
       }
     }
 
-    const handler = {
+    const handlers = {
       handleRepeatText () {
         this.repeatedText = this.repeatText(
           this.text,
@@ -46,7 +46,7 @@
     const App = () => ({
       ...states,
       ...methods,
-      ...handler
+      ...handlers
     })
 
     createApp({
@@ -164,7 +164,7 @@
       <div>
         <button 
           class="btn btn-secondary" 
-          @click="handleCopyToClipboard"
+          @click.prevent="handleCopyToClipboard"
         >
           Copy Result
         </button>

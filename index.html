@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <title>Text Repeater</title>
+</head>
+<body>
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/petite-vue?module'
+
+    const states = {
+      text: '',
+      repetition: 1,
+      separator: ' ',
+      repeatedText: ''
+    }
+
+    const methods = {
+      repeatText (text, count, { separator }) {
+        const repeatedText = `${text}${separator}`
+        return repeatedText.repeat(count)
+      },
+      copyToClipboard (text) {
+       navigator.clipboard.writeText(text) 
+      }
+    }
+
+    const handler = {
+      handleRepeatText () {
+        this.repeatedText = this.repeatText(
+          this.text,
+          this.repetition,
+          {
+            separator: this.separator
+          }
+        )
+      },
+      handleCopyToClipboard () {
+        this.copyToClipboard(this.repeatedText)        
+        alert('Copied succesfully')
+      }
+    }
+
+    const App = () => ({
+      ...states,
+      ...methods,
+      ...handler
+    })
+
+    createApp({
+      App
+    }).mount()
+  </script>
+
+  <div 
+    class="p-3" 
+    v-scope="App()"
+  >
+    <form
+      class="container"
+      @submit.prevent="handleRepeatText"
+    >      
+      <div class="mb-3">
+        <label 
+          class="form-label" 
+          for="text"
+        >
+          <b>Your Text</b>
+        </label>
+        <textarea 
+          class="form-control" 
+          id="text" 
+          v-model="text"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label 
+          class="form-label" 
+          for="repetition"
+        >
+          <b>Repetitions</b>
+        </label>
+        <input 
+          class="form-control" 
+          id="separator" 
+          type="number"
+          min="1"
+          v-model="repetition"
+        >
+      </div>
+      <div class="mb-3">
+        <label 
+          class="form-label" 
+          for="separator"
+        >
+          <b>Separator</b>
+        </label>
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            id="space" 
+            type="radio"
+            name="separator"
+            v-model="separator" 
+            value=" "
+          >
+          <label 
+            class="form-check-label" 
+            for="separator-space"
+          >
+            Space
+          </label>
+        </div>
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            id="newline" 
+            type="radio"
+            name="separator"
+            v-model="separator" 
+            :value="'\n'"
+          >
+          <label 
+            class="form-check-label" 
+            for="separator-newline"
+          >
+            New line
+          </label>
+        </div>
+        <div class="form-check">
+          <input 
+            class="form-check-input" 
+            id="space" 
+            type="radio"
+            name="separator"
+            v-model="separator" 
+            value=""
+          >
+          <label
+            class="form-check-label" 
+            for="separator-custom"
+          >
+            Custom
+          </label>
+          <input 
+            class="form-control" 
+            type="text" 
+            v-model="separator"
+          >
+        </div>
+      </div>
+      <div class="mb-3">
+        <button 
+          class="btn btn-primary" 
+          type="submit"
+        >
+          Generate
+        </button>
+      </div>
+    </form>
+    <form class="container">
+      <div>
+        <button 
+          class="btn btn-secondary" 
+          @click="handleCopyToClipboard"
+        >
+          Copy Result
+        </button>
+      </div>
+      <textarea 
+        class="form-control my-3" 
+        id="repeated-text" 
+        v-model="repeatedText"
+      ></textarea>
+    </form>
+  </div>
+</body>
+</html>
